@@ -94,11 +94,11 @@ const Login: React.FC = () => {
         </form>
 
         <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600 font-medium mb-2">Demo Accounts:</p>
+          <p className="text-sm text-gray-600 font-medium mb-2">Demo Accounts / Tips:</p>
           <div className="space-y-1 text-xs text-gray-500">
             <div>Admin: admin / password</div>
             <div>Warden: warden / password</div>
-            <div>Student: student / password</div>
+            <div>Students can login using their Name or Email as username and their Student ID as password (student_id)</div>
           </div>
         </div>
       </div>

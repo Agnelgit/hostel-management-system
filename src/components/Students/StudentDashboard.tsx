@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, CreditCard, MessageSquare, UserCheck, Calendar, DollarSign } from 'lucide-react';
+import { Home, CreditCard, MessageSquare, UserCheck, DollarSign } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import apiClient from '../../api/client';
 import { Student, FeeRecord, Complaint, Visitor } from '../../types';
@@ -77,6 +77,30 @@ const StudentDashboard: React.FC = () => {
       </div>
 
       {/* Quick Stats */}
+      <div className="flex justify-end">
+        <button
+          onClick={async () => {
+            if (!student) return;
+            try {
+              const report = await apiClient.getStudentReport(student.id);
+              const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `${student.student_id || student.first_name}_report.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch (error) {
+              console.error('Error generating report:', error);
+              alert('Failed to generate report');
+            }
+          }}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg mb-4 hover:bg-indigo-700"
+        >
+          Download My Report
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-3">

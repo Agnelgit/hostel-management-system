@@ -14,17 +14,56 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Username and password required' });
     }
 
-    const [users] = await db.execute(
+    // Try to find the user by username or email first
+    let [users] = await db.execute(
       'SELECT * FROM users WHERE username = ? OR email = ?',
       [username, username]
     );
+
+    // If not found, try to match by student's full name (first + last) or student email
+    if (users.length === 0) {
+      try {
+        const [students] = await db.execute(
+          `SELECT s.*, u.* FROM students s JOIN users u ON s.user_id = u.id WHERE CONCAT(s.first_name, ' ', s.last_name) = ? OR s.email = ?`,
+          [username, username]
+        );
+
+        if (students.length > 0) {
+          // students rows will include user fields (u.*) — pick the first
+          users = [students[0]];
+        }
+      } catch (e) {
+        console.error('Error searching student by name during login:', e);
+      }
+    }
 
     if (users.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     const user = users[0];
-    const validPassword = await bcrypt.compare(password, user.password);
+
+    // For student accounts allow login with their student_id as password
+    let validPassword = false;
+    try {
+      validPassword = await bcrypt.compare(password, user.password);
+    } catch (e) {
+      validPassword = false;
+    }
+
+    if (!validPassword && user.role === 'student') {
+      try {
+        const [studentRows] = await db.execute('SELECT student_id FROM students WHERE user_id = ?', [user.id]);
+        if (studentRows.length > 0) {
+          const studentRecord = studentRows[0];
+          if (password === studentRecord.student_id) {
+            validPassword = true;
+          }
+        }
+      } catch (e) {
+        console.error('Error checking student id for login fallback:', e);
+      }
+    }
 
     if (!validPassword) {
       return res.status(401).json({ error: 'Invalid credentials' });

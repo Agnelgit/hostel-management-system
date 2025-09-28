@@ -60,4 +60,35 @@ router.get('/monthly', authenticateToken, requireRole(['admin', 'warden']), asyn
   }
 });
 
+// Per-student report (admin/warden or the student themselves)
+router.get('/student/:id', authenticateToken, async (req, res) => {
+  try {
+    const studentId = req.params.id;
+
+    // allow student to fetch only their own report
+    if (req.user.role === 'student') {
+      const [userStudent] = await db.execute('SELECT id FROM students WHERE user_id = ?', [req.user.id]);
+      if (userStudent.length === 0 || userStudent[0].id != studentId) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+    } else {
+      // admin/warden allowed
+    }
+
+    // Gather student profile, fees, complaints, visitors
+    const [students] = await db.execute('SELECT * FROM students WHERE id = ?', [studentId]);
+    if (students.length === 0) return res.status(404).json({ error: 'Student not found' });
+    const student = students[0];
+
+    const [fees] = await db.execute('SELECT * FROM fee_records WHERE student_id = ? ORDER BY due_date DESC', [studentId]);
+    const [complaints] = await db.execute('SELECT * FROM complaints WHERE student_id = ? ORDER BY created_at DESC', [studentId]);
+    const [visitors] = await db.execute('SELECT * FROM visitors WHERE student_id = ? ORDER BY entry_time DESC', [studentId]);
+
+    res.json({ student, fees, complaints, visitors });
+  } catch (error) {
+    console.error('Error generating student report:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

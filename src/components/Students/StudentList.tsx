@@ -178,6 +178,27 @@ const StudentList: React.FC = () => {
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
+                        onClick={async () => {
+                          try {
+                            const report = await apiClient.getStudentReport(student.id);
+                            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${student.student_id || student.first_name}_report.json`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                          } catch (error) {
+                            console.error('Error generating report:', error);
+                            alert('Failed to generate report');
+                          }
+                        }}
+                        className="text-green-600 hover:text-green-900 mr-3"
+                        title="Generate Student Report"
+                      >
+                        📄
+                      </button>
+                      <button
                         onClick={() => handleDelete(student.id)}
                         className="text-red-600 hover:text-red-900"
                       >

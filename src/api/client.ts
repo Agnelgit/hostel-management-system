@@ -179,6 +179,10 @@ class ApiClient {
   async getMonthlyReport(month: number, year: number): Promise<Array<{ category: string; value: number; count: number }>> {
     return this.request<Array<{ category: string; value: number; count: number }>>(`/reports/monthly?month=${month}&year=${year}`);
   }
+
+  async getStudentReport(studentId: number): Promise<{ student: Student; fees: FeeRecord[]; complaints: Complaint[]; visitors: Visitor[] }> {
+    return this.request<{ student: Student; fees: FeeRecord[]; complaints: Complaint[]; visitors: Visitor[] }>(`/reports/student/${studentId}`);
+  }
 }
 
 const apiClient = new ApiClient();

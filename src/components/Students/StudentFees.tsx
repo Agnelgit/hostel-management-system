@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CreditCard, Calendar, DollarSign, CheckCircle, AlertCircle, Clock } from 'lucide-react';
+import { CreditCard, DollarSign, CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import apiClient from '../../api/client';
 import { FeeRecord, Student } from '../../types';
@@ -14,13 +14,19 @@ const StudentFees: React.FC = () => {
   useEffect(() => {
     const fetchFees = async () => {
       try {
-        // Get student profile first
-        const studentData = await apiClient.getStudentByUserId(user?.id || 0);
-        setStudent(studentData);
+        if (user?.role === 'student') {
+          // Get student profile first
+          const studentData = await apiClient.getStudentByUserId(user?.id || 0);
+          setStudent(studentData);
 
-        // Get student's fees
-        const feesData = await apiClient.getStudentFees(studentData.id);
-        setFees(feesData);
+          // Get student's fees
+          const feesData = await apiClient.getStudentFees(studentData.id);
+          setFees(feesData);
+        } else {
+          // Admin / Warden: fetch all fees
+          const feesData = await apiClient.getFees();
+          setFees(feesData);
+        }
       } catch (error) {
         console.error('Error fetching fees:', error);
       } finally {
@@ -31,7 +37,7 @@ const StudentFees: React.FC = () => {
     if (user?.id) {
       fetchFees();
     }
-  }, [user?.id]);
+  }, [user?.id, user?.role]);
 
   if (loading) {
     return (
@@ -86,7 +92,7 @@ const StudentFees: React.FC = () => {
       </div>
 
       {/* Student Info */}
-      {student && (
+      {user?.role === 'student' && student && (
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Student Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -193,6 +199,11 @@ const StudentFees: React.FC = () => {
                     )}
                   </div>
                 </div>
+                {user?.role !== 'student' && (
+                  <div className="mt-3 text-sm text-gray-600">
+                    Student: {fee.student_name || '—'} • ID: {fee.student_id_number || '—'}
+                  </div>
+                )}
               </div>
             ))}
           </div>

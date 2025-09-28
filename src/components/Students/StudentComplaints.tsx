@@ -23,13 +23,15 @@ const StudentComplaints: React.FC = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        // Get student profile first
-        const studentData = await apiClient.getStudentByUserId(user?.id || 0);
-        setStudent(studentData);
-
-        // Get student's complaints
-        const complaintsData = await apiClient.getStudentComplaints(studentData.id);
-        setComplaints(complaintsData);
+        if (user?.role === 'student') {
+          const studentData = await apiClient.getStudentByUserId(user?.id || 0);
+          setStudent(studentData);
+          const complaintsData = await apiClient.getStudentComplaints(studentData.id);
+          setComplaints(complaintsData);
+        } else {
+          const complaintsData = await apiClient.getComplaints();
+          setComplaints(complaintsData);
+        }
       } catch (error) {
         console.error('Error fetching complaints:', error);
       } finally {
@@ -40,7 +42,7 @@ const StudentComplaints: React.FC = () => {
     if (user?.id) {
       fetchComplaints();
     }
-  }, [user?.id]);
+  }, [user?.id, user?.role]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +50,7 @@ const StudentComplaints: React.FC = () => {
     if (!student) return;
 
     try {
-      const newComplaint = await apiClient.createComplaint({
+      await apiClient.createComplaint({
         student_id: student.id,
         title: formData.title,
         description: formData.description,
@@ -276,6 +278,9 @@ const StudentComplaints: React.FC = () => {
                         <span className="text-xs text-gray-500">
                           {new Date(complaint.created_at).toLocaleDateString()}
                         </span>
+                        {user?.role !== 'student' && (
+                          <span className="text-xs text-gray-500 ml-2">Student: {complaint.student_name || '—'} • ID: {complaint.student_id_number || '—'}</span>
+                        )}
                       </div>
                       {complaint.resolution_notes && (
                         <div className="mt-3 p-3 bg-gray-50 rounded-lg">

@@ -3,7 +3,11 @@ import { Users, Building, AlertTriangle, UserCheck, CreditCard, Home } from 'luc
 import { DashboardStats as StatsType } from '../../types';
 import apiClient from '../../api/client';
 
-const DashboardStats: React.FC = () => {
+interface DashboardStatsProps {
+  onCardClick?: (section: string) => void;
+}
+
+const DashboardStats: React.FC<DashboardStatsProps> = ({ onCardClick }) => {
   const [stats, setStats] = useState<StatsType | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -81,18 +85,22 @@ const DashboardStats: React.FC = () => {
     }
   ];
 
-  return (
+    return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
       {statCards.map((card, index) => {
         const Icon = card.icon;
         return (
-          <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <button
+            key={index}
+            onClick={() => onCardClick && onCardClick(card.title.toLowerCase())}
+            className="text-left bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow w-full"
+          >
             <div className={`w-12 h-12 ${card.color} rounded-lg flex items-center justify-center mb-4`}>
               <Icon className="w-6 h-6 text-white" />
             </div>
             <h3 className="text-sm font-medium text-gray-600 mb-1">{card.title}</h3>
             <p className={`text-2xl font-bold ${card.textColor}`}>{card.value}</p>
-          </div>
+          </button>
         );
       })}
     </div>

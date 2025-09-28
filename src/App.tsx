@@ -45,7 +45,16 @@ const AppContent: React.FC = () => {
         return (
           <div className="space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <DashboardStats />
+            <DashboardStats onCardClick={(key) => {
+              // map simple key to sections
+              // simple heuristics: map the card title keyword to a section id
+              if (key.includes('student')) setActiveSection('students');
+              else if (key.includes('room') || key.includes('available')) setActiveSection('rooms');
+              else if (key.includes('complaint') || key.includes('open')) setActiveSection('complaints');
+              else if (key.includes('visitor')) setActiveSection('visitors');
+              else if (key.includes('fee') || key.includes('pending')) setActiveSection('fees');
+              else setActiveSection(key);
+            }} />
           </div>
         );
       case 'students':

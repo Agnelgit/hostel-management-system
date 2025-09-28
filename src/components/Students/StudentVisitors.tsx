@@ -24,13 +24,15 @@ const StudentVisitors: React.FC = () => {
   useEffect(() => {
     const fetchVisitors = async () => {
       try {
-        // Get student profile first
-        const studentData = await apiClient.getStudentByUserId(user?.id || 0);
-        setStudent(studentData);
-
-        // Get student's visitors
-        const visitorsData = await apiClient.getStudentVisitors(studentData.id);
-        setVisitors(visitorsData);
+        if (user?.role === 'student') {
+          const studentData = await apiClient.getStudentByUserId(user?.id || 0);
+          setStudent(studentData);
+          const visitorsData = await apiClient.getStudentVisitors(studentData.id);
+          setVisitors(visitorsData);
+        } else {
+          const visitorsData = await apiClient.getVisitors();
+          setVisitors(visitorsData);
+        }
       } catch (error) {
         console.error('Error fetching visitors:', error);
       } finally {
@@ -41,7 +43,7 @@ const StudentVisitors: React.FC = () => {
     if (user?.id) {
       fetchVisitors();
     }
-  }, [user?.id]);
+  }, [user?.id, user?.role]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +51,7 @@ const StudentVisitors: React.FC = () => {
     if (!student) return;
 
     try {
-      const newVisitor = await apiClient.registerVisitor({
+      await apiClient.registerVisitor({
         student_id: student.id,
         visitor_name: formData.visitor_name,
         visitor_phone: formData.visitor_phone,
@@ -306,6 +308,9 @@ const StudentVisitors: React.FC = () => {
                             <Phone className="w-3 h-3" />
                             {visitor.visitor_phone}
                           </span>
+                        )}
+                        {user?.role !== 'student' && (
+                          <span className="text-xs text-gray-500 ml-2">Student ID: {visitor.student_id || '—'}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
