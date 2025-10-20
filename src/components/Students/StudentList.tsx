@@ -4,6 +4,7 @@ import { Student } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import apiClient from '../../api/client';
 import StudentForm from './StudentForm';
+import StudentDetailAdmin from '../Admin/StudentDetailAdmin';
 
 const StudentList: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
@@ -12,6 +13,7 @@ const StudentList: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const { user } = useAuth();
+  const [detailStudentId, setDetailStudentId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -107,6 +109,9 @@ const StudentList: React.FC = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Report
+                </th>
                 {user?.role === 'admin' && (
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -123,9 +128,15 @@ const StudentList: React.FC = () => {
                         <User className="w-5 h-5 text-blue-600" />
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
-                          {student.first_name} {student.last_name}
-                        </div>
+                        <div className="text-sm font-medium text-gray-900">{
+                          user?.role !== 'student' ? (
+                            <button onClick={() => setDetailStudentId(student.id)} className="hover:underline">
+                              {student.first_name} {student.last_name}
+                            </button>
+                          ) : (
+                            <>{student.first_name} {student.last_name}</>
+                          )
+                        }</div>
                         <div className="text-sm text-gray-500">{student.student_id}</div>
                       </div>
                     </div>
@@ -165,6 +176,13 @@ const StudentList: React.FC = () => {
                     }`}>
                       {student.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      <div>₹ {student.pending_fees_total ?? 0}</div>
+                      <div className="text-xs text-gray-500">Complaints: {student.active_complaints_count ?? 0}</div>
+                      <div className="text-xs text-gray-500">Visitors: {student.active_visitors_count ?? 0}</div>
+                    </div>
                   </td>
                   {user?.role === 'admin' && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -232,6 +250,10 @@ const StudentList: React.FC = () => {
             setEditingStudent(null);
           }}
         />
+      )}
+
+      {detailStudentId && (
+        <StudentDetailAdmin studentId={detailStudentId} onClose={() => setDetailStudentId(null)} />
       )}
     </div>
   );

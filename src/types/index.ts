@@ -23,6 +23,10 @@ export interface Student {
   room_number?: string;
   allocation_date?: string;
   created_at: string;
+  // aggregated report fields
+  pending_fees_total?: number;
+  active_complaints_count?: number;
+  active_visitors_count?: number;
 }
 
 export interface Room {

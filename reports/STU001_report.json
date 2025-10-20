@@ -1,0 +1,113 @@
+{
+  "student": {
+    "id": 2,
+    "user_id": 3,
+    "student_id": "STU001",
+    "first_name": "SANTOSH",
+    "last_name": "VARKEY",
+    "email": "student@hostel.com",
+    "phone": "",
+    "address": "",
+    "course": "Computer Science",
+    "year_of_study": 2,
+    "guardian_name": "",
+    "guardian_phone": "",
+    "admission_date": "2025-08-29T18:30:00.000Z",
+    "status": "active",
+    "created_at": "2025-08-30T16:35:50.000Z"
+  },
+  "fees": [
+    {
+      "id": 1,
+      "student_id": 2,
+      "amount": "8000.00",
+      "fee_type": "monthly",
+      "due_date": "2025-09-13T18:30:00.000Z",
+      "paid_date": null,
+      "payment_method": "cash",
+      "status": "pending",
+      "remarks": null,
+      "created_at": "2025-08-30T16:35:50.000Z"
+    },
+    {
+      "id": 2,
+      "student_id": 2,
+      "amount": "5000.00",
+      "fee_type": "security",
+      "due_date": "2025-08-29T18:30:00.000Z",
+      "paid_date": null,
+      "payment_method": "cash",
+      "status": "paid",
+      "remarks": null,
+      "created_at": "2025-08-30T16:35:50.000Z"
+    },
+    {
+      "id": 3,
+      "student_id": 2,
+      "amount": "2000.00",
+      "fee_type": "maintenance",
+      "due_date": "2025-08-24T18:30:00.000Z",
+      "paid_date": null,
+      "payment_method": "cash",
+      "status": "overdue",
+      "remarks": null,
+      "created_at": "2025-08-30T16:35:50.000Z"
+    }
+  ],
+  "complaints": [
+    {
+      "id": 1,
+      "student_id": 2,
+      "title": "Water Issue",
+      "description": "No water supply in room since morning",
+      "category": "maintenance",
+      "priority": "high",
+      "status": "open",
+      "assigned_to": null,
+      "resolution_notes": null,
+      "created_at": "2025-08-30T16:35:50.000Z",
+      "resolved_at": null
+    },
+    {
+      "id": 2,
+      "student_id": 2,
+      "title": "Cleaning Request",
+      "description": "Room needs cleaning service",
+      "category": "cleanliness",
+      "priority": "medium",
+      "status": "in_progress",
+      "assigned_to": null,
+      "resolution_notes": null,
+      "created_at": "2025-08-30T16:35:50.000Z",
+      "resolved_at": null
+    }
+  ],
+  "visitors": [
+    {
+      "id": 1,
+      "student_id": 2,
+      "visitor_name": "Jane Doe",
+      "visitor_phone": "9876543210",
+      "purpose": "Family visit",
+      "entry_time": "2025-08-30T16:35:50.000Z",
+      "exit_time": null,
+      "id_type": "aadhar",
+      "id_number": null,
+      "status": "entered",
+      "created_at": "2025-08-30T16:35:50.000Z"
+    },
+    {
+      "id": 2,
+      "student_id": 2,
+      "visitor_name": "Mike Smith",
+      "visitor_phone": "9876543211",
+      "purpose": "Study group",
+      "entry_time": "2025-08-30T14:35:50.000Z",
+      "exit_time": null,
+      "id_type": "aadhar",
+      "id_number": null,
+      "status": "exited",
+      "created_at": "2025-08-30T16:35:50.000Z"
+    }
+  ]
+}

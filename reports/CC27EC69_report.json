@@ -1,0 +1,22 @@
+{
+  "student": {
+    "id": 3,
+    "user_id": null,
+    "student_id": "CC27EC69",
+    "first_name": "Pyarry",
+    "last_name": "Andrew",
+    "email": "student@hostel.com",
+    "phone": "9753124860",
+    "address": "shoo from sow",
+    "course": "MTECH",
+    "year_of_study": 1,
+    "guardian_name": "Andrew",
+    "guardian_phone": "9885643453",
+    "admission_date": "2025-09-10T18:30:00.000Z",
+    "status": "active",
+    "created_at": "2025-09-11T10:12:50.000Z"
+  },
+  "fees": [],
+  "complaints": [],
+  "visitors": []
+}

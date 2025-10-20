@@ -98,7 +98,7 @@ const Login: React.FC = () => {
           <div className="space-y-1 text-xs text-gray-500">
             <div>Admin: admin / password</div>
             <div>Warden: warden / password</div>
-            <div>Students can login using their Name or Email as username and their Student ID as password (student_id)</div>
+            <div>Student login: use full name (e.g. "First Last") OR student's email as username, and use the student's <strong>student_id</strong> as password.</div>
           </div>
         </div>
       </div>

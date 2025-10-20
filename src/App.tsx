@@ -9,6 +9,10 @@ import StudentDashboard from './components/Students/StudentDashboard';
 import StudentFees from './components/Students/StudentFees';
 import StudentComplaints from './components/Students/StudentComplaints';
 import StudentVisitors from './components/Students/StudentVisitors';
+import AdminFees from './components/Admin/AdminFees';
+import AdminComplaints from './components/Admin/AdminComplaints';
+import AdminVisitors from './components/Admin/AdminVisitors';
+import ReportsList from './components/Admin/ReportsList';
 import RoomManagement from './components/Rooms/RoomManagement';
 import apiClient from './api/client';
 
@@ -62,42 +66,16 @@ const AppContent: React.FC = () => {
       case 'rooms':
         return <RoomManagement />;
       case 'fees':
-        if (user?.role === 'student') {
-          return <StudentFees />;
-        }
-        return (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Fee Management</h2>
-            <p className="text-gray-600">Fee management functionality coming soon...</p>
-          </div>
-        );
+        if (user?.role === 'student') return <StudentFees />;
+        return <AdminFees />;
       case 'complaints':
-        if (user?.role === 'student') {
-          return <StudentComplaints />;
-        }
-        return (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Complaints</h2>
-            <p className="text-gray-600">Complaint management functionality coming soon...</p>
-          </div>
-        );
+        if (user?.role === 'student') return <StudentComplaints />;
+        return <AdminComplaints />;
       case 'visitors':
-        if (user?.role === 'student') {
-          return <StudentVisitors />;
-        }
-        return (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Visitor Management</h2>
-            <p className="text-gray-600">Visitor management functionality coming soon...</p>
-          </div>
-        );
+        if (user?.role === 'student') return <StudentVisitors />;
+        return <AdminVisitors />;
       case 'reports':
-        return (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Reports</h2>
-            <p className="text-gray-600">Reports functionality coming soon...</p>
-          </div>
-        );
+        return <ReportsList />;
       default:
         return (
           <div className="space-y-6">

@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate-reports": "node ./scripts/generate_student_reports.js",
+    "test-student-logins": "node ./scripts/test_student_logins.js",
     "dev": "concurrently \"npm run server\" \"vite\"",
     "build": "vite build",
     "lint": "eslint .",
